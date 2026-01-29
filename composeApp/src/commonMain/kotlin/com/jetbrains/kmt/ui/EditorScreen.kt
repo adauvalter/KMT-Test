@@ -25,8 +25,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -41,9 +41,9 @@ import com.jetbrains.kmt.lang.api.AnalysisResult
 import com.jetbrains.kmt.lang.api.Analyzer
 import com.jetbrains.kmt.lang.diagnostics.Diagnostic
 import com.jetbrains.kmt.lang.diagnostics.SourceSpan
+import com.jetbrains.kmt.ui.theme.Dimens
 import com.jetbrains.kmt.ui.theme.LocalUiColors
 import com.jetbrains.kmt.ui.theme.UiColors
-import com.jetbrains.kmt.ui.theme.UiDimens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -95,10 +95,10 @@ fun EditorScreen() {
             Modifier
                 .fillMaxSize()
                 .background(background)
-                .padding(UiDimens.ScreenPadding),
+                .padding(Dimens.ScreenPadding),
     ) {
         Header(colors = colors)
-        Spacer(Modifier.height(UiDimens.PanelSpacing))
+        Spacer(Modifier.height(Dimens.PanelSpacing))
         Row(modifier = Modifier.weight(1f)) {
             Panel(
                 title = "Editor",
@@ -113,16 +113,16 @@ fun EditorScreen() {
                     modifier = Modifier.fillMaxSize(),
                 )
             }
-            Spacer(Modifier.width(UiDimens.PanelSpacing))
+            Spacer(Modifier.width(Dimens.PanelSpacing))
             Column(
                 modifier = Modifier.weight(0.4f).fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(UiDimens.PanelSpacing),
+                verticalArrangement = Arrangement.spacedBy(Dimens.PanelSpacing),
             ) {
                 Panel(title = "Output", colors = colors, modifier = Modifier.weight(0.55f)) {
                     val outputStyle =
                         TextStyle(
                             fontFamily = FontFamily.Monospace,
-                            fontSize = UiDimens.OutputFontSize,
+                            fontSize = Dimens.OutputFontSize,
                             color = colors.onSurfaceMuted,
                         )
                     val scroll = rememberScrollState()
@@ -148,7 +148,7 @@ fun EditorScreen() {
                 }
             }
         }
-        Spacer(Modifier.height(UiDimens.PanelSpacing))
+        Spacer(Modifier.height(Dimens.PanelSpacing))
         StatusIndicator(
             showIndicator = showIndicator,
             diagnostics = diagnostics,
@@ -189,17 +189,17 @@ private fun Panel(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = colors.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = UiDimens.PanelElevation),
+        elevation = CardDefaults.cardElevation(defaultElevation = Dimens.PanelElevation),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(UiDimens.PanelPadding),
+            modifier = Modifier.fillMaxSize().padding(Dimens.PanelPadding),
         ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelMedium,
                 color = colors.muted,
             )
-            Spacer(Modifier.height(UiDimens.PanelTitleSpacing))
+            Spacer(Modifier.height(Dimens.PanelTitleSpacing))
             content()
         }
     }
@@ -215,7 +215,7 @@ private fun DiagnosticsList(
     val textStyle =
         TextStyle(
             fontFamily = FontFamily.SansSerif,
-            fontSize = UiDimens.DiagnosticFontSize,
+            fontSize = Dimens.DiagnosticFontSize,
             color = colors.onSurfaceMuted,
         )
     Column(
@@ -223,7 +223,7 @@ private fun DiagnosticsList(
             Modifier
                 .fillMaxSize()
                 .verticalScroll(scroll),
-        verticalArrangement = Arrangement.spacedBy(UiDimens.DiagnosticsSpacing),
+        verticalArrangement = Arrangement.spacedBy(Dimens.DiagnosticsSpacing),
     ) {
         AnimatedVisibility(visible = diagnostics.isEmpty()) {
             Text("No issues detected.", style = textStyle, color = colors.success)
@@ -234,9 +234,9 @@ private fun DiagnosticsList(
             Card(
                 modifier = Modifier.fillMaxWidth().clickable { onDiagnosticClick(diag) },
                 colors = CardDefaults.cardColors(containerColor = colors.errorBackground),
-                elevation = CardDefaults.cardElevation(defaultElevation = UiDimens.Zero),
+                elevation = CardDefaults.cardElevation(defaultElevation = Dimens.Zero),
             ) {
-                Column(modifier = Modifier.padding(UiDimens.DiagnosticsCardPadding)) {
+                Column(modifier = Modifier.padding(Dimens.DiagnosticsCardPadding)) {
                     Text(
                         text = "Line $line:$col",
                         style = textStyle.copy(fontWeight = FontWeight.SemiBold),
@@ -265,8 +265,8 @@ private fun StatusIndicator(
     Box(
         modifier =
             modifier
-                .width(UiDimens.StatusPillWidth)
-                .height(UiDimens.StatusPillHeight),
+                .width(Dimens.StatusPillWidth)
+                .height(Dimens.StatusPillHeight),
         contentAlignment = Alignment.Center,
     ) {
         if (showContent) {
@@ -277,7 +277,7 @@ private fun StatusIndicator(
                 colors = CardDefaults.cardColors(containerColor = statusColor.copy(alpha = 0.12f)),
             ) {
                 Box(
-                    modifier = Modifier.fillMaxSize().padding(UiDimens.StatusPillPadding),
+                    modifier = Modifier.fillMaxSize().padding(Dimens.StatusPillPadding),
                     contentAlignment = Alignment.Center,
                 ) {
                     if (showIndicator) {
@@ -286,8 +286,8 @@ private fun StatusIndicator(
                             trackColor = statusColor.copy(alpha = 0.2f),
                             modifier =
                                 Modifier
-                                    .width(UiDimens.StatusIndicatorWidth)
-                                    .height(UiDimens.StatusIndicatorHeight),
+                                    .width(Dimens.StatusIndicatorWidth)
+                                    .height(Dimens.StatusIndicatorHeight),
                         )
                     } else {
                         Text(

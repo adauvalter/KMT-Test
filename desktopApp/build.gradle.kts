@@ -20,6 +20,7 @@ java {
 dependencies {
     implementation(projects.composeApp)
     implementation(compose.desktop.currentOs)
+    implementation(libs.compose.components.resources)
 }
 
 compose.desktop {

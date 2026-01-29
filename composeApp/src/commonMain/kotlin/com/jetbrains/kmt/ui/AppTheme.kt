@@ -1,5 +1,6 @@
 package com.jetbrains.kmt.ui
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
@@ -7,14 +8,13 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.jetbrains.kmt.ui.theme.DarkUiColors
+import com.jetbrains.kmt.ui.theme.Dimens
 import com.jetbrains.kmt.ui.theme.LightUiColors
 import com.jetbrains.kmt.ui.theme.LocalUiColors
-import com.jetbrains.kmt.ui.theme.UiDimens
 
 private val LightAppColors: ColorScheme =
     lightColorScheme(
@@ -50,23 +50,23 @@ private val AppTypography =
             TextStyle(
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = UiDimens.TitleFontSize,
+                fontSize = Dimens.TitleFontSize,
             ),
         bodyLarge =
             TextStyle(
                 fontFamily = FontFamily.SansSerif,
-                fontSize = UiDimens.BodyLargeFontSize,
+                fontSize = Dimens.BodyLargeFontSize,
             ),
         bodyMedium =
             TextStyle(
                 fontFamily = FontFamily.SansSerif,
-                fontSize = UiDimens.BodyMediumFontSize,
+                fontSize = Dimens.BodyMediumFontSize,
             ),
         labelMedium =
             TextStyle(
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Medium,
-                fontSize = UiDimens.LabelMediumFontSize,
+                fontSize = Dimens.LabelMediumFontSize,
             ),
     )
 

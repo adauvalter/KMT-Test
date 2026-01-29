@@ -41,11 +41,12 @@ class Lexer(private val source: String) {
                         if (peek() == DECIMAL_POINT_CHAR) hasDot = true
                         advance()
                     }
-                    tokens += Token(
-                        TokenType.Number,
-                        spanFrom(start, startLine, startColumn),
-                        source
-                    )
+                    tokens +=
+                        Token(
+                            TokenType.Number,
+                            spanFrom(start, startLine, startColumn),
+                            source,
+                        )
                 }
 
                 char == DOUBLE_QUOTE_CHAR -> {
@@ -62,48 +63,54 @@ class Lexer(private val source: String) {
                         }
                     }
                     if (!terminated) {
-                        diagnostics += Diagnostic(
-                            "Unterminated string literal",
-                            spanFrom(start, startLine, startColumn)
-                        )
+                        diagnostics +=
+                            Diagnostic(
+                                "Unterminated string literal",
+                                spanFrom(start, startLine, startColumn),
+                            )
                     }
-                    tokens += Token(
-                        TokenType.String,
-                        spanFrom(start, startLine, startColumn),
-                        source
-                    )
+                    tokens +=
+                        Token(
+                            TokenType.String,
+                            spanFrom(start, startLine, startColumn),
+                            source,
+                        )
                 }
 
                 char == MINUS_CHAR && peek() == GREATER_THAN_CHAR -> {
                     advance()
-                    tokens += Token(
-                        TokenType.Arrow,
-                        spanFrom(start, startLine, startColumn),
-                        source
-                    )
+                    tokens +=
+                        Token(
+                            TokenType.Arrow,
+                            spanFrom(start, startLine, startColumn),
+                            source,
+                        )
                 }
 
                 char in OPERATOR_CHARS -> {
-                    tokens += Token(
-                        TokenType.Operator,
-                        spanFrom(start, startLine, startColumn),
-                        source
-                    )
+                    tokens +=
+                        Token(
+                            TokenType.Operator,
+                            spanFrom(start, startLine, startColumn),
+                            source,
+                        )
                 }
 
                 char in SYMBOL_CHARS -> {
-                    tokens += Token(
-                        TokenType.Symbol,
-                        spanFrom(start, startLine, startColumn),
-                        source
-                    )
+                    tokens +=
+                        Token(
+                            TokenType.Symbol,
+                            spanFrom(start, startLine, startColumn),
+                            source,
+                        )
                 }
 
                 else -> {
-                    diagnostics += Diagnostic(
-                        "Unexpected character '$char'",
-                        spanFrom(start, startLine, startColumn)
-                    )
+                    diagnostics +=
+                        Diagnostic(
+                            "Unexpected character '$char'",
+                            spanFrom(start, startLine, startColumn),
+                        )
                 }
             }
         }
@@ -120,7 +127,7 @@ class Lexer(private val source: String) {
             startOffset = start,
             length = index - start,
             line = startLine,
-            column = startColumn
+            column = startColumn,
         )
     }
 

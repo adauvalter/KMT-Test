@@ -3,7 +3,7 @@ package com.jetbrains.kmt.ui.theme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-object UiDimens {
+object Dimens {
     val Zero = 0.dp
     val Space4 = 4.dp
     val Space8 = 8.dp

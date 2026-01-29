@@ -29,3 +29,8 @@ kotlin {
         }
     }
 }
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "com.jetbrains.kmt.generated.resources"
+}

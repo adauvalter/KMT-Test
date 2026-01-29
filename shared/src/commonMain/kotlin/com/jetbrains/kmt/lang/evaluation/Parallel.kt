@@ -85,7 +85,7 @@ private suspend fun mapInParallel(
     chunkSize: Int,
     mapper: suspend (NumberValue) -> NumberValue,
     result: DoubleArray,
-): Unit {
+) {
     return coroutineScope {
         val jobs = mutableListOf<kotlinx.coroutines.Deferred<Unit>>()
         var start = 0L

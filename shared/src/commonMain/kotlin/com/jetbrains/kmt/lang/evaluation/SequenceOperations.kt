@@ -41,5 +41,4 @@ class SequenceOperations {
     ): NumberValue {
         return parallelMapReduce(sequence, mapper, neutral, reducer)
     }
-
 }

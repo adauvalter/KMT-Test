@@ -45,9 +45,9 @@ import androidx.compose.ui.unit.isUnspecified
 import com.jetbrains.kmt.lang.diagnostics.Diagnostic
 import com.jetbrains.kmt.lang.syntax.Lexer
 import com.jetbrains.kmt.lang.syntax.TokenType
+import com.jetbrains.kmt.ui.theme.Dimens
 import com.jetbrains.kmt.ui.theme.LocalUiColors
 import com.jetbrains.kmt.ui.theme.UiColors
-import com.jetbrains.kmt.ui.theme.UiDimens
 import kotlin.math.roundToInt
 
 @Composable
@@ -62,9 +62,9 @@ fun CodeEditor(
     val textStyle =
         TextStyle(
             fontFamily = FontFamily.Monospace,
-            fontSize = UiDimens.EditorFontSize,
+            fontSize = Dimens.EditorFontSize,
             color = MaterialTheme.colorScheme.onSurface,
-            lineHeight = UiDimens.EditorLineHeight,
+            lineHeight = Dimens.EditorLineHeight,
         )
 
     val density = LocalDensity.current
@@ -104,7 +104,7 @@ fun CodeEditor(
         val layout = layoutResult ?: return@LaunchedEffect
         val offset = value.selection.end.coerceIn(0, value.text.length)
         val rect = layout.getCursorRect(offset)
-        val padding = with(density) { UiDimens.EditorGutterPadding.toPx() }
+        val padding = with(density) { Dimens.EditorGutterPadding.toPx() }
 
         val viewHeight = scrollState.viewportSize
         if (viewHeight > 0) {
@@ -142,17 +142,17 @@ fun CodeEditor(
             modifier
                 .clip(MaterialTheme.shapes.medium)
                 .background(colors.editorBackground)
-                .border(UiDimens.BorderWidth, colors.editorBorder, MaterialTheme.shapes.medium)
-                .padding(UiDimens.EditorPadding)
+                .border(Dimens.BorderWidth, colors.editorBorder, MaterialTheme.shapes.medium)
+                .padding(Dimens.EditorPadding)
                 .verticalScroll(scrollState),
     ) {
         LineNumbers(
             lineInfos = lineInfos,
             textStyle = textStyle,
             colors = colors,
-            modifier = Modifier.padding(end = UiDimens.EditorGutterPadding),
+            modifier = Modifier.padding(end = Dimens.EditorGutterPadding),
         )
-        Spacer(Modifier.width(UiDimens.EditorGutterGap))
+        Spacer(Modifier.width(Dimens.EditorGutterGap))
         Box(
             modifier =
                 Modifier
