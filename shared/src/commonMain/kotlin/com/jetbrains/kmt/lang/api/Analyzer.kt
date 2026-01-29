@@ -24,12 +24,10 @@ object Analyzer {
                 return@withContext AnalysisResult(diagnostics = lex.diagnostics)
             }
             val parse = Parser(lex.tokens).parseProgram()
-            if (parse.diagnostics.isNotEmpty()) {
-                return@withContext AnalysisResult(diagnostics = parse.diagnostics)
-            }
             val bind = Binder().bind(parse.program)
-            if (bind.diagnostics.isNotEmpty()) {
-                return@withContext AnalysisResult(diagnostics = bind.diagnostics)
+            val diagnostics = parse.diagnostics + bind.diagnostics
+            if (diagnostics.isNotEmpty()) {
+                return@withContext AnalysisResult(diagnostics = diagnostics)
             }
             return@withContext try {
                 val evaluation = Interpreter().evaluate(bind.program)
