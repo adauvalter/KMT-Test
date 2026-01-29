@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kover)
 }
 
 kotlin {
@@ -19,6 +20,19 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutinesCore)
             implementation(libs.kotlinx.coroutinesTest)
+        }
+    }
+}
+
+kover {
+    reports {
+        total {
+            html {
+                onCheck.set(true)
+            }
+            xml {
+                onCheck.set(true)
+            }
         }
     }
 }
