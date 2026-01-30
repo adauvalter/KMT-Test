@@ -98,7 +98,7 @@ sealed interface BoundStatement {
     /**
      * Bound variable declaration.
      */
-    data class VarDecl(
+    data class VariableDeclaration(
         val name: String,
         val expression: BoundExpression,
         override val span: SourceSpan,

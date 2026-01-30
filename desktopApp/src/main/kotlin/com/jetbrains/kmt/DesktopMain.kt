@@ -41,15 +41,14 @@ private suspend fun setTaskbarIcon() {
     taskbar.iconImage = loadKmtIconImage() ?: return
 }
 
-private suspend fun loadKmtIconImage(): BufferedImage? {
-    return try {
+private suspend fun loadKmtIconImage(): BufferedImage? =
+    try {
         val environment = getSystemResourceEnvironment()
         val bytes = getDrawableResourceBytes(environment, Res.drawable.kmt)
         ImageIO.read(ByteArrayInputStream(bytes))
     } catch (_: Exception) {
         null
     }
-}
 
 private const val WINDOW_START_WIDTH = 1200
 private const val WINDOW_START_HEIGHT = 800

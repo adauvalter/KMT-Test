@@ -14,7 +14,9 @@ import com.jetbrains.kmt.lang.diagnostics.mergeSpan
  * syntax errors encountered during parsing. Parsing is resilient: when an error is
  * detected it attempts to recover to the next statement boundary.
  */
-class Parser(private val tokens: List<Token>) {
+class Parser(
+    private val tokens: List<Token>,
+) {
     private val diagnostics = mutableListOf<Diagnostic>()
     private var index = 0
 
@@ -44,17 +46,20 @@ class Parser(private val tokens: List<Token>) {
                 val nameToken = expect(TokenType.Identifier, ParserMessages.EXPECTED_IDENTIFIER_AFTER_VAR) ?: return null
                 expectSymbol(Symbols.EQUALS, ParserMessages.EXPECTED_EQUALS_AFTER_VAR) ?: return null
                 val expression = parseExpression(0) ?: return null
-                Statement.VarDecl(nameToken.text, expression, mergeSpan(nameToken.span, expression.span))
+                Statement.VariableDeclaration(nameToken.text, expression, mergeSpan(nameToken.span, expression.span))
             }
+
             matchKeyword(Keywords.OUT) -> {
                 val expression = parseExpression(0) ?: return null
                 Statement.Out(expression, mergeSpan(previous().span, expression.span))
             }
+
             matchKeyword(Keywords.PRINT) -> {
                 val stringToken = expect(TokenType.String, ParserMessages.EXPECTED_STRING_AFTER_PRINT) ?: return null
                 val content = unescapeString(stringToken.text)
                 Statement.Print(content, stringToken.span)
             }
+
             else -> {
                 diagnostics += Diagnostic(ParserMessages.EXPECTED_STATEMENT, current().span)
                 null
@@ -87,7 +92,7 @@ class Parser(private val tokens: List<Token>) {
      * Parses prefix operators (currently unary minus) before delegating to primary parsing.
      */
     private fun parsePrefix(): Expression? {
-        if (matchOperator(Operators.MINUS)) {
+        if (matchMinus()) {
             val expression = parseExpression(4) ?: return null
             return Expression.Unary(Operators.MINUS, expression, mergeSpan(previous().span, expression.span))
         }
@@ -105,7 +110,11 @@ class Parser(private val tokens: List<Token>) {
                 val isInt = !text.contains('.')
                 Expression.NumberLiteral(text, isInt, token.span)
             }
-            match(TokenType.Identifier) -> Expression.Identifier(token.text, token.span)
+
+            match(TokenType.Identifier) -> {
+                Expression.Identifier(token.text, token.span)
+            }
+
             matchSymbol(Symbols.LEFT_PAREN) -> {
                 val expression = parseExpression(0) ?: return null
                 val close =
@@ -113,6 +122,7 @@ class Parser(private val tokens: List<Token>) {
                         ?: return null
                 Expression.Group(expression, mergeSpan(token.span, close.span))
             }
+
             matchSymbol(Symbols.LEFT_BRACE) -> {
                 val startExpression = parseExpression(0) ?: return null
                 expectSymbol(Symbols.COMMA, ParserMessages.EXPECTED_COMMA_IN_SEQUENCE) ?: return null
@@ -120,8 +130,15 @@ class Parser(private val tokens: List<Token>) {
                 expectSymbol(Symbols.RIGHT_BRACE, ParserMessages.EXPECTED_RIGHT_BRACE_AFTER_SEQUENCE) ?: return null
                 Expression.SequenceLiteral(startExpression, endExpression, mergeSpan(token.span, endExpression.span))
             }
-            matchKeyword(Keywords.MAP) -> parseMapCall(token.span)
-            matchKeyword(Keywords.REDUCE) -> parseReduceCall(token.span)
+
+            matchKeyword(Keywords.MAP) -> {
+                parseMapCall(token.span)
+            }
+
+            matchKeyword(Keywords.REDUCE) -> {
+                parseReduceCall(token.span)
+            }
+
             else -> {
                 diagnostics += Diagnostic(ParserMessages.EXPECTED_EXPRESSION, token.span)
                 null
@@ -247,8 +264,8 @@ class Parser(private val tokens: List<Token>) {
         return false
     }
 
-    private fun matchOperator(text: String): Boolean {
-        if (check(TokenType.Operator) && current().text == text) {
+    private fun matchMinus(): Boolean {
+        if (check(TokenType.Operator) && current().text == Operators.MINUS) {
             advance()
             return true
         }

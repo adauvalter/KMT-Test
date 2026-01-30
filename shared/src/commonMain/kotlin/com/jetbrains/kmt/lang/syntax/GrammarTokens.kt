@@ -21,7 +21,6 @@ object Symbols {
     const val RIGHT_BRACE = "}"
     const val COMMA = ","
     const val EQUALS = "="
-    const val ARROW = "->"
 }
 
 /**

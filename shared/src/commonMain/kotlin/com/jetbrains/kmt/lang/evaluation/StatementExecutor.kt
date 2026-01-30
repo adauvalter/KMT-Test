@@ -17,14 +17,16 @@ class StatementExecutor(
         context: EvaluationContext,
     ) {
         when (statement) {
-            is BoundStatement.VarDecl -> {
+            is BoundStatement.VariableDeclaration -> {
                 val value = expressionEvaluator.evaluate(statement.expression, context.globals)
                 context.globals[statement.name] = value
             }
+
             is BoundStatement.Out -> {
                 val value = expressionEvaluator.evaluate(statement.expression, context.globals)
                 context.output.append(formatter.formatValue(value)).append('\n')
             }
+
             is BoundStatement.Print -> {
                 context.output.append(statement.text)
             }

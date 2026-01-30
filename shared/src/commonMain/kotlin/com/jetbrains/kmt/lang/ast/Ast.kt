@@ -93,7 +93,7 @@ sealed interface Statement {
     /**
      * Variable declaration statement.
      */
-    data class VarDecl(
+    data class VariableDeclaration(
         val name: String,
         val expression: Expression,
         override val span: SourceSpan,

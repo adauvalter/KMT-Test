@@ -25,24 +25,26 @@ class Binder {
         val boundStatements = mutableListOf<BoundStatement>()
         for (statement in program.statements) {
             when (statement) {
-                is Statement.VarDecl -> {
+                is Statement.VariableDeclaration -> {
                     val bound = bindExpression(statement.expression, globals)
                     if (bound != null) {
                         globals[statement.name] = bound.type
                         boundStatements +=
-                            BoundStatement.VarDecl(
+                            BoundStatement.VariableDeclaration(
                                 name = statement.name,
                                 expression = bound,
                                 span = statement.span,
                             )
                     }
                 }
+
                 is Statement.Out -> {
                     val bound = bindExpression(statement.expression, globals)
                     if (bound != null) {
                         boundStatements += BoundStatement.Out(bound, statement.span)
                     }
                 }
+
                 is Statement.Print -> {
                     boundStatements += BoundStatement.Print(statement.text, statement.span)
                 }
@@ -56,7 +58,10 @@ class Binder {
         env: Map<String, Type>,
     ): BoundExpression? {
         return when (expression) {
-            is Expression.NumberLiteral -> parseNumberLiteral(expression)
+            is Expression.NumberLiteral -> {
+                parseNumberLiteral(expression)
+            }
+
             is Expression.Identifier -> {
                 val type = env[expression.name]
                 if (type == null) {
@@ -66,13 +71,18 @@ class Binder {
                     BoundExpression.Variable(expression.name, type, expression.span)
                 }
             }
+
             is Expression.Unary -> {
                 val boundExpression = bindExpression(expression.expression, env) ?: return null
                 val numberType =
                     requireNumber(boundExpression, "Unary '${expression.op}' expects a number") ?: return null
                 BoundExpression.Unary(expression.op, boundExpression, numberType, expression.span)
             }
-            is Expression.Group -> bindExpression(expression.expression, env)
+
+            is Expression.Group -> {
+                bindExpression(expression.expression, env)
+            }
+
             is Expression.Binary -> {
                 val left = bindExpression(expression.left, env) ?: return null
                 val right = bindExpression(expression.right, env) ?: return null
@@ -86,6 +96,7 @@ class Binder {
                     }
                 BoundExpression.Binary(left, expression.operator, right, resultType, expression.span)
             }
+
             is Expression.SequenceLiteral -> {
                 val start = bindExpression(expression.start, env) ?: return null
                 val end = bindExpression(expression.end, env) ?: return null
@@ -95,6 +106,7 @@ class Binder {
                 }
                 BoundExpression.SequenceLiteral(start, end, expression.span)
             }
+
             is Expression.MapCall -> {
                 val sequence = bindExpression(expression.sequence, env) ?: return null
                 if (sequence.type !is SequenceType) {
@@ -113,6 +125,7 @@ class Binder {
                     span = expression.span,
                 )
             }
+
             is Expression.ReduceCall -> {
                 val sequence = bindExpression(expression.sequence, env) ?: return null
                 if (sequence.type !is SequenceType) {
@@ -147,17 +160,16 @@ class Binder {
     private fun requireNumber(
         expression: BoundExpression,
         message: String,
-    ): NumberType? {
-        return if (expression.type is NumberType) {
+    ): NumberType? =
+        if (expression.type is NumberType) {
             expression.type as NumberType
         } else {
             diagnostics += Diagnostic(message, expression.span)
             null
         }
-    }
 
-    private fun parseNumberLiteral(expression: Expression.NumberLiteral): BoundExpression? {
-        return if (expression.isInt) {
+    private fun parseNumberLiteral(expression: Expression.NumberLiteral): BoundExpression? =
+        if (expression.isInt) {
             val value = expression.text.toLongOrNull()
             if (value == null) {
                 diagnostics += Diagnostic("Integer literal is out of range", expression.span)
@@ -174,23 +186,30 @@ class Binder {
                 BoundExpression.NumberLiteral(NumberValue.fromDouble(value), expression.span)
             }
         }
-    }
 
     private fun resolveAccumulatorType(
         accumulatorType: NumberType,
         resultType: NumberType,
         span: SourceSpan,
-    ): NumberType? {
-        return when {
-            accumulatorType == NumberType.DoubleType -> NumberType.DoubleType
-            resultType == NumberType.DoubleType -> NumberType.DoubleType
-            accumulatorType == resultType -> accumulatorType
+    ): NumberType? =
+        when {
+            accumulatorType == NumberType.DoubleType -> {
+                NumberType.DoubleType
+            }
+
+            resultType == NumberType.DoubleType -> {
+                NumberType.DoubleType
+            }
+
+            accumulatorType == resultType -> {
+                accumulatorType
+            }
+
             else -> {
                 diagnostics += Diagnostic("reduce lambda result must match accumulator type", span)
                 null
             }
         }
-    }
 }
 
 /**

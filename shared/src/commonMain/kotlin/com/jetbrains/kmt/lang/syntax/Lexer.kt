@@ -6,7 +6,9 @@ import com.jetbrains.kmt.lang.diagnostics.SourceSpan
 /**
  * Converts a source string into a stream of [Token]s and diagnostics.
  */
-class Lexer(private val source: String) {
+class Lexer(
+    private val source: String,
+) {
     private val diagnostics = mutableListOf<Diagnostic>()
     private val tokens = mutableListOf<Token>()
 
@@ -122,14 +124,13 @@ class Lexer(private val source: String) {
         start: Int,
         startLine: Int,
         startColumn: Int,
-    ): SourceSpan {
-        return SourceSpan(
+    ): SourceSpan =
+        SourceSpan(
             startOffset = start,
             length = index - start,
             line = startLine,
             column = startColumn,
         )
-    }
 
     private fun isAtEnd(): Boolean = index >= source.length
 
@@ -153,14 +154,23 @@ class Lexer(private val source: String) {
     ): Boolean {
         val length = end - start
         return when (length) {
-            3 ->
+            3 -> {
                 source.regionMatches(start, Keywords.VAR, 0, 3, ignoreCase = false) ||
                     source.regionMatches(start, Keywords.OUT, 0, 3, ignoreCase = false) ||
                     source.regionMatches(start, Keywords.MAP, 0, 3, ignoreCase = false)
+            }
 
-            5 -> source.regionMatches(start, Keywords.PRINT, 0, 5, ignoreCase = false)
-            6 -> source.regionMatches(start, Keywords.REDUCE, 0, 6, ignoreCase = false)
-            else -> false
+            5 -> {
+                source.regionMatches(start, Keywords.PRINT, 0, 5, ignoreCase = false)
+            }
+
+            6 -> {
+                source.regionMatches(start, Keywords.REDUCE, 0, 6, ignoreCase = false)
+            }
+
+            else -> {
+                false
+            }
         }
     }
 }

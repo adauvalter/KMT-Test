@@ -1,4 +1,4 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.syntax
 
 import com.jetbrains.kmt.lang.ast.Expression
 import com.jetbrains.kmt.lang.ast.Statement
@@ -14,7 +14,12 @@ class ParserDiagnosticsTest {
         val source = "out (1 + 2"
         val result = Parser(Lexer(source).lex().tokens).parseProgram()
         assertTrue(result.diagnostics.isNotEmpty())
-        assertTrue(result.diagnostics.first().message.contains(")"))
+        assertTrue(
+            result.diagnostics
+                .first()
+                .message
+                .contains(")"),
+        )
     }
 
     @Test

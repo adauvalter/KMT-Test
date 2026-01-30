@@ -9,6 +9,7 @@ import com.jetbrains.kmt.lang.syntax.Lexer
 import com.jetbrains.kmt.lang.syntax.Parser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Runs lexing, parsing, type-checking, and evaluation for a source program.
@@ -34,6 +35,8 @@ object Analyzer {
                 AnalysisResult(output = evaluation.output)
             } catch (err: EvaluationError) {
                 AnalysisResult(diagnostics = listOf(Diagnostic(err.message ?: "Runtime error", err.span)))
+            } catch (err: CancellationException) {
+                throw err
             } catch (err: RuntimeException) {
                 AnalysisResult(
                     diagnostics = listOf(Diagnostic(err.message ?: "Runtime error", SourceSpan(0, 0, 1, 1))),

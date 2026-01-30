@@ -1,4 +1,4 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.evaluation
 
 import com.jetbrains.kmt.lang.api.Analyzer
 import com.jetbrains.kmt.lang.diagnostics.SourceSpan
@@ -38,7 +38,6 @@ class EvaluatorRuntimeTest {
                     sequence,
                     { value -> NumberValue.fromDouble(value.asDouble() / 2.0) },
                     NumberType.DoubleType,
-                    SourceSpan(0, 0, 1, 1),
                 )
             assertEquals(NumberType.DoubleType, mapped.elementType)
             assertEquals(0.5, mapped.get(0).asDouble())

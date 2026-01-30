@@ -1,4 +1,4 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.evaluation
 
 import com.jetbrains.kmt.lang.ast.BoundExpression
 import com.jetbrains.kmt.lang.diagnostics.SourceSpan
@@ -48,7 +48,9 @@ class ExpressionEvaluatorTest {
                 """
                 out reduce(map({1, 3}, i -> i + 1), 0, x y -> x + y)
                 """.trimIndent()
-            val result = com.jetbrains.kmt.lang.api.Analyzer.analyze(program)
+            val result =
+                com.jetbrains.kmt.lang.api.Analyzer
+                    .analyze(program)
             assertEquals("9\n", result.output)
         }
 

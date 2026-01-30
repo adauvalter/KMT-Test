@@ -44,12 +44,14 @@ import com.jetbrains.kmt.lang.diagnostics.SourceSpan
 import com.jetbrains.kmt.ui.theme.Dimens
 import com.jetbrains.kmt.ui.theme.LocalUiColors
 import com.jetbrains.kmt.ui.theme.UiColors
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
+@OptIn(FlowPreview::class)
 @Composable
 fun EditorScreen() {
     var textValue by remember { mutableStateOf(TextFieldValue(sampleProgram)) }
@@ -59,7 +61,7 @@ fun EditorScreen() {
     val focusRequester = remember { FocusRequester() }
     val colors = LocalUiColors.current
     LaunchedEffect(Unit) {
-        var latestRequest = ""
+        var latestRequest: String
         snapshotFlow { textValue.text }
             .debounce(250)
             .distinctUntilChanged()

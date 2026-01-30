@@ -1,4 +1,4 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.evaluation
 
 import com.jetbrains.kmt.lang.ast.BoundExpression
 import com.jetbrains.kmt.lang.ast.BoundStatement
@@ -24,7 +24,7 @@ class StatementExecutorTest {
             val executor = StatementExecutor(ExpressionEvaluator(), ValueFormatter())
             val context = EvaluationContext(mutableMapOf(), StringBuilder())
 
-            executor.execute(BoundStatement.VarDecl("x", number, span), context)
+            executor.execute(BoundStatement.VariableDeclaration("x", number, span), context)
             executor.execute(BoundStatement.Out(variable, span), context)
             executor.execute(BoundStatement.Print("done", span), context)
 

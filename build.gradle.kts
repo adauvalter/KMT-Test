@@ -11,12 +11,16 @@ plugins {
 subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     extensions.configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-        version.set("1.2.1")
+        version.set("1.8.0")
         android.set(true)
         enableExperimentalRules.set(true)
         filter {
             exclude("**/build/**")
             exclude("**/generated/**")
         }
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
+        compilerOptions.allWarningsAsErrors.set(true)
     }
 }

@@ -14,9 +14,7 @@ class ValueChecks {
         value: Value,
         message: String,
         span: SourceSpan,
-    ): NumberValue {
-        return value as? NumberValue ?: throw EvaluationError(message, span)
-    }
+    ): NumberValue = value as? NumberValue ?: throw EvaluationError(message, span)
 
     /**
      * Ensures that a value is a sequence or throws an [EvaluationError].
@@ -25,9 +23,7 @@ class ValueChecks {
         value: Value,
         message: String,
         span: SourceSpan,
-    ): SequenceValue {
-        return value as? SequenceValue ?: throw EvaluationError(message, span)
-    }
+    ): SequenceValue = value as? SequenceValue ?: throw EvaluationError(message, span)
 }
 
 /**

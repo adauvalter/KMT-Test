@@ -1,4 +1,4 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.evaluation
 
 import com.jetbrains.kmt.lang.evaluation.NumberValue
 import com.jetbrains.kmt.lang.evaluation.RangeSequence

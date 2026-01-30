@@ -1,4 +1,4 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.ast
 
 import com.jetbrains.kmt.lang.ast.Expression
 import com.jetbrains.kmt.lang.ast.Program
@@ -26,10 +26,10 @@ class AstSmokeTest {
         assertEquals("a", reduceCall.accumulatorParameter)
         assertEquals("b", reduceCall.elementParameter)
 
-        val varDecl = Statement.VarDecl("x", number, span)
+        val variableDeclaration = Statement.VariableDeclaration("x", number, span)
         val out = Statement.Out(identifier, span)
         val print = Statement.Print("hi", span)
-        val program = Program(listOf(varDecl, out, print))
+        val program = Program(listOf(variableDeclaration, out, print))
 
         assertEquals(3, program.statements.size)
         assertEquals(unary, group.expression)

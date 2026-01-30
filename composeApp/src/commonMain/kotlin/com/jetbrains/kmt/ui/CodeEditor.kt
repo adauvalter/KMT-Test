@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -169,7 +170,9 @@ fun CodeEditor(
                         .fillMaxHeight()
                         .wrapContentWidth(unbounded = true)
                         .focusRequester(focusRequester),
-                cursorBrush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.primary),
+                cursorBrush =
+                    androidx.compose.ui.graphics
+                        .SolidColor(MaterialTheme.colorScheme.primary),
                 visualTransformation = transformation,
                 maxLines = Int.MAX_VALUE,
                 onTextLayout = { layoutResult = it },
@@ -192,11 +195,13 @@ private fun LineNumbers(
 ) {
     Layout(
         content = {
-            for (info in lineInfos) {
-                Text(
-                    text = info.number?.toString() ?: "",
-                    style = textStyle.copy(color = colors.lineNumber),
-                )
+            lineInfos.forEachIndexed { index, info ->
+                key(index) {
+                    Text(
+                        text = info.number?.toString() ?: "",
+                        style = textStyle.copy(color = colors.lineNumber),
+                    )
+                }
             }
         },
         modifier = modifier,

@@ -1,6 +1,5 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.evaluation
 
-import com.jetbrains.kmt.lang.diagnostics.SourceSpan
 import com.jetbrains.kmt.lang.evaluation.ArraySequence
 import com.jetbrains.kmt.lang.evaluation.NumberValue
 import com.jetbrains.kmt.lang.evaluation.RangeSequence
@@ -31,7 +30,6 @@ class SequenceOperationsTest {
                     sequence,
                     { value -> NumberValue.fromInt(value.asLong() + 1) },
                     NumberType.IntType,
-                    SourceSpan(0, 0, 1, 1),
                 )
             assertEquals(25_001L, mapped.size)
             assertEquals(1L, mapped.get(0).asLong())

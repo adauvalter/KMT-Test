@@ -3,7 +3,7 @@ package com.jetbrains.kmt.lang.diagnostics
 /**
  * Severity level of a [Diagnostic].
  */
-enum class Severity { Error, Warning }
+enum class Severity { Error, }
 
 /**
  * A diagnostic message emitted during lexing, parsing, binding, or evaluation.

@@ -85,26 +85,24 @@ private suspend fun mapInParallel(
     chunkSize: Int,
     mapper: suspend (NumberValue) -> NumberValue,
     result: DoubleArray,
-) {
-    return coroutineScope {
-        val jobs = mutableListOf<kotlinx.coroutines.Deferred<Unit>>()
-        var start = 0L
-        while (start < size) {
-            val end = min(size, start + chunkSize)
-            val chunkStart = start
-            jobs +=
-                async(Dispatchers.Default) {
-                    var i = chunkStart
-                    while (i < end) {
-                        val value = mapper(sequence.get(i))
-                        result[i.toInt()] = value.doubleValue
-                        i++
-                    }
+) = coroutineScope {
+    val jobs = mutableListOf<kotlinx.coroutines.Deferred<Unit>>()
+    var start = 0L
+    while (start < size) {
+        val end = min(size, start + chunkSize)
+        val chunkStart = start
+        jobs +=
+            async(Dispatchers.Default) {
+                var i = chunkStart
+                while (i < end) {
+                    val value = mapper(sequence.get(i))
+                    result[i.toInt()] = value.doubleValue
+                    i++
                 }
-            start = end
-        }
-        jobs.awaitAll()
+            }
+        start = end
     }
+    jobs.awaitAll()
 }
 
 private suspend fun reduceInParallel(
@@ -113,8 +111,8 @@ private suspend fun reduceInParallel(
     chunkSize: Int,
     neutral: NumberValue,
     reducer: suspend (NumberValue, NumberValue) -> NumberValue,
-): NumberValue {
-    return coroutineScope {
+): NumberValue =
+    coroutineScope {
         val jobs = mutableListOf<kotlinx.coroutines.Deferred<NumberValue>>()
         var start = 0L
         while (start < size) {
@@ -139,7 +137,6 @@ private suspend fun reduceInParallel(
         }
         finalAccumulator
     }
-}
 
 private suspend fun reduceMappedInParallel(
     sequence: SequenceValue,
@@ -148,8 +145,8 @@ private suspend fun reduceMappedInParallel(
     mapper: suspend (NumberValue) -> NumberValue,
     neutral: NumberValue,
     reducer: suspend (NumberValue, NumberValue) -> NumberValue,
-): NumberValue {
-    return coroutineScope {
+): NumberValue =
+    coroutineScope {
         val jobs = mutableListOf<kotlinx.coroutines.Deferred<NumberValue>>()
         var start = 0L
         while (start < size) {
@@ -175,4 +172,3 @@ private suspend fun reduceMappedInParallel(
         }
         finalAccumulator
     }
-}

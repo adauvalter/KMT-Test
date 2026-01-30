@@ -1,8 +1,15 @@
 package com.jetbrains.kmt.ui
 
-internal data class LineInfo(val number: Int?, val topPx: Float, val heightPx: Float)
+internal data class LineInfo(
+    val number: Int?,
+    val topPx: Float,
+    val heightPx: Float,
+)
 
-internal data class LineMetrics(val topPx: Float, val heightPx: Float)
+internal data class LineMetrics(
+    val topPx: Float,
+    val heightPx: Float,
+)
 
 internal fun computeLineStarts(text: String): List<Int> {
     val lineStarts = ArrayList<Int>()
@@ -21,11 +28,10 @@ internal fun computeLineStarts(text: String): List<Int> {
 internal fun lineInfosWithoutLayout(
     lineStarts: List<Int>,
     fallbackLineHeightPx: Float,
-): List<LineInfo> {
-    return List(lineStarts.size) { index ->
+): List<LineInfo> =
+    List(lineStarts.size) { index ->
         LineInfo(index + 1, index * fallbackLineHeightPx, fallbackLineHeightPx)
     }
-}
 
 internal fun assignLineNumbers(
     lineStarts: List<Int>,

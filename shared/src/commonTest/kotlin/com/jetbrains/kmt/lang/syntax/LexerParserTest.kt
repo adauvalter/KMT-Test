@@ -1,4 +1,4 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.syntax
 
 import com.jetbrains.kmt.lang.ast.Expression
 import com.jetbrains.kmt.lang.ast.Statement

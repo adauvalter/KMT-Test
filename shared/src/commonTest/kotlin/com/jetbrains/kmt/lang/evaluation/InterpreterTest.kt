@@ -1,9 +1,14 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.evaluation
 
 import com.jetbrains.kmt.lang.api.Analyzer
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class InterpreterTest {
@@ -43,7 +48,12 @@ class InterpreterTest {
             val program = "out {1.2, 3}"
             val result = Analyzer.analyze(program)
             assertTrue(result.diagnostics.isNotEmpty())
-            assertTrue(result.diagnostics.first().message.contains("Sequence bounds"))
+            assertTrue(
+                result.diagnostics
+                    .first()
+                    .message
+                    .contains("Sequence bounds"),
+            )
         }
 
     @Test
@@ -57,7 +67,12 @@ class InterpreterTest {
                 """.trimIndent()
             val result = Analyzer.analyze(program)
             assertTrue(result.diagnostics.isNotEmpty())
-            assertTrue(result.diagnostics.first().message.contains("Undefined variable"))
+            assertTrue(
+                result.diagnostics
+                    .first()
+                    .message
+                    .contains("Undefined variable"),
+            )
         }
 
     @Test
@@ -67,5 +82,16 @@ class InterpreterTest {
             val result = Analyzer.analyze(program)
             assertTrue(result.diagnostics.isEmpty())
             assertEquals("0.5\n", result.output)
+        }
+
+    @Test
+    fun analyzerDoesNotSwallowCancellation() =
+        runTest {
+            assertFailsWith<CancellationException> {
+                withContext(coroutineContext) {
+                    currentCoroutineContext().cancel()
+                    Analyzer.analyze("out 1")
+                }
+            }
         }
 }

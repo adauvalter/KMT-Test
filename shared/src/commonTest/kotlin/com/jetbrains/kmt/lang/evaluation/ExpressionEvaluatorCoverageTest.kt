@@ -1,4 +1,4 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.evaluation
 
 import com.jetbrains.kmt.lang.ast.BoundExpression
 import com.jetbrains.kmt.lang.diagnostics.SourceSpan

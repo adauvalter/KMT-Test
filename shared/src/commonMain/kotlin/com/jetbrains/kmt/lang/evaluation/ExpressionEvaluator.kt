@@ -20,12 +20,17 @@ class ExpressionEvaluator(
     suspend fun evaluate(
         expression: BoundExpression,
         env: Map<String, Value>,
-    ): Value {
-        return when (expression) {
-            is BoundExpression.NumberLiteral -> expression.value
-            is BoundExpression.Variable ->
+    ): Value =
+        when (expression) {
+            is BoundExpression.NumberLiteral -> {
+                expression.value
+            }
+
+            is BoundExpression.Variable -> {
                 env[expression.name]
                     ?: throw EvaluationError("Undefined variable '${expression.name}'", expression.span)
+            }
+
             is BoundExpression.Unary -> {
                 val value =
                     checks.requireNumber(
@@ -35,6 +40,7 @@ class ExpressionEvaluator(
                     )
                 numberOperations.unary(expression.op, value, expression.span)
             }
+
             is BoundExpression.Binary -> {
                 val left =
                     checks.requireNumber(
@@ -50,6 +56,7 @@ class ExpressionEvaluator(
                     )
                 numberOperations.binary(left, right, expression.op, expression.span)
             }
+
             is BoundExpression.SequenceLiteral -> {
                 val start =
                     checks.requireNumber(
@@ -65,6 +72,7 @@ class ExpressionEvaluator(
                     )
                 sequenceFactory.range(start, end, expression.span)
             }
+
             is BoundExpression.MapCall -> {
                 val sequence =
                     checks.requireSequence(
@@ -79,11 +87,12 @@ class ExpressionEvaluator(
                         { value -> lambdaEvaluator.evaluateSingle(expression.parameterName, value, expression.body) }
                     }
                 val elementType = (expression.type as SequenceType).elementType
-                sequenceOperations.map(sequence, mapper, elementType, expression.span)
+                sequenceOperations.map(sequence, mapper, elementType)
             }
+
             is BoundExpression.ReduceCall -> {
                 if (expression.sequence is BoundExpression.MapCall) {
-                    val mapExpression = expression.sequence as BoundExpression.MapCall
+                    val mapExpression = expression.sequence
                     val sequence =
                         checks.requireSequence(
                             evaluate(mapExpression.sequence, env),
@@ -164,10 +173,9 @@ class ExpressionEvaluator(
                 }
             }
         }
-    }
 
-    private fun isPureNumeric(expression: BoundExpression): Boolean {
-        return when (expression) {
+    private fun isPureNumeric(expression: BoundExpression): Boolean =
+        when (expression) {
             is BoundExpression.NumberLiteral -> true
             is BoundExpression.Variable -> true
             is BoundExpression.Unary -> isPureNumeric(expression.expression)
@@ -176,36 +184,43 @@ class ExpressionEvaluator(
             is BoundExpression.MapCall -> false
             is BoundExpression.ReduceCall -> false
         }
-    }
 
     private fun evaluateNumeric(
         expression: BoundExpression,
         parameterName: String,
         value: NumberValue,
-    ): NumberValue {
-        return when (expression) {
-            is BoundExpression.NumberLiteral -> expression.value
-            is BoundExpression.Variable ->
+    ): NumberValue =
+        when (expression) {
+            is BoundExpression.NumberLiteral -> {
+                expression.value
+            }
+
+            is BoundExpression.Variable -> {
                 if (expression.name == parameterName) {
                     value
                 } else {
                     throw EvaluationError("Undefined variable '${expression.name}'", expression.span)
                 }
+            }
+
             is BoundExpression.Unary -> {
                 val operand = evaluateNumeric(expression.expression, parameterName, value)
                 numberOperations.unary(expression.op, operand, expression.span)
             }
+
             is BoundExpression.Binary -> {
                 val left = evaluateNumeric(expression.left, parameterName, value)
                 val right = evaluateNumeric(expression.right, parameterName, value)
                 numberOperations.binary(left, right, expression.op, expression.span)
             }
+
             is BoundExpression.SequenceLiteral,
             is BoundExpression.MapCall,
             is BoundExpression.ReduceCall,
-            -> throw EvaluationError("Unsupported expression in numeric lambda", expression.span)
+            -> {
+                throw EvaluationError("Unsupported expression in numeric lambda", expression.span)
+            }
         }
-    }
 
     private fun evaluateNumeric(
         expression: BoundExpression,
@@ -213,28 +228,36 @@ class ExpressionEvaluator(
         accumulatorValue: NumberValue,
         elementName: String,
         elementValue: NumberValue,
-    ): NumberValue {
-        return when (expression) {
-            is BoundExpression.NumberLiteral -> expression.value
-            is BoundExpression.Variable ->
+    ): NumberValue =
+        when (expression) {
+            is BoundExpression.NumberLiteral -> {
+                expression.value
+            }
+
+            is BoundExpression.Variable -> {
                 when (expression.name) {
                     accumulatorName -> accumulatorValue
                     elementName -> elementValue
                     else -> throw EvaluationError("Undefined variable '${expression.name}'", expression.span)
                 }
+            }
+
             is BoundExpression.Unary -> {
                 val operand = evaluateNumeric(expression.expression, accumulatorName, accumulatorValue, elementName, elementValue)
                 numberOperations.unary(expression.op, operand, expression.span)
             }
+
             is BoundExpression.Binary -> {
                 val left = evaluateNumeric(expression.left, accumulatorName, accumulatorValue, elementName, elementValue)
                 val right = evaluateNumeric(expression.right, accumulatorName, accumulatorValue, elementName, elementValue)
                 numberOperations.binary(left, right, expression.op, expression.span)
             }
+
             is BoundExpression.SequenceLiteral,
             is BoundExpression.MapCall,
             is BoundExpression.ReduceCall,
-            -> throw EvaluationError("Unsupported expression in numeric lambda", expression.span)
+            -> {
+                throw EvaluationError("Unsupported expression in numeric lambda", expression.span)
+            }
         }
-    }
 }

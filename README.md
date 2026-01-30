@@ -1,5 +1,14 @@
+### KMT Test
 This is a Kotlin Multiplatform project targeting Desktop (JVM).
 It contains a small interpreter plus an interactive editor for the KMT test language.
+
+### Disclaimer
+
+- Large sequences are fully materialized and can hit memory limits; this is a known trade-off. Millions of elements work well; billions can exceed JVM array limits. A lazy strategy would avoid OOM but is slower.
+- Performance has been validated using the example program and moderate inputs; extreme stress tests (very large ranges) can still exhaust JVM memory.
+- I only have macOS available and did not set up a Windows VM to test the Windows build.
+
+### Structure
 
 * [/shared](./shared/src) contains the interpreter core (lexer, parser, diagnostics, type checker, evaluator).
 * [/composeApp](./composeApp/src) contains the Compose Multiplatform UI.

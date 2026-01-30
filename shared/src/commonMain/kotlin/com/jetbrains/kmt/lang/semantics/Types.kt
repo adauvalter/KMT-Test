@@ -19,7 +19,9 @@ sealed interface NumberType : Type {
 /**
  * Sequence type with element type information.
  */
-data class SequenceType(val elementType: NumberType) : Type
+data class SequenceType(
+    val elementType: NumberType,
+) : Type
 
 /**
  * Returns the resulting numeric type after combining two numeric operands.
@@ -27,10 +29,9 @@ data class SequenceType(val elementType: NumberType) : Type
 fun mergeNumberTypes(
     left: NumberType,
     right: NumberType,
-): NumberType {
-    return if (left == NumberType.DoubleType || right == NumberType.DoubleType) {
+): NumberType =
+    if (left == NumberType.DoubleType || right == NumberType.DoubleType) {
         NumberType.DoubleType
     } else {
         NumberType.IntType
     }
-}

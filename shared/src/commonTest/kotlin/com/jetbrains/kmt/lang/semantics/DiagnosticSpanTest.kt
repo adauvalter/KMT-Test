@@ -1,4 +1,4 @@
-package com.jetbrains.kmt.lang
+package com.jetbrains.kmt.lang.semantics
 
 import com.jetbrains.kmt.lang.semantics.Binder
 import com.jetbrains.kmt.lang.syntax.Lexer

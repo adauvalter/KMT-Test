@@ -6,20 +6,18 @@ import com.jetbrains.kmt.lang.semantics.NumberType
  * Formats runtime values for display.
  */
 class ValueFormatter {
-    fun formatValue(value: Value): String {
-        return when (value) {
+    fun formatValue(value: Value): String =
+        when (value) {
             is NumberValue -> formatNumber(value)
             is SequenceValue -> formatSequence(value)
         }
-    }
 
-    private fun formatNumber(value: NumberValue): String {
-        return if (value.kind == NumberType.IntType) {
+    private fun formatNumber(value: NumberValue): String =
+        if (value.kind == NumberType.IntType) {
             value.asLong().toString()
         } else {
             value.asDouble().toString()
         }
-    }
 
     private fun formatSequence(
         sequence: SequenceValue,

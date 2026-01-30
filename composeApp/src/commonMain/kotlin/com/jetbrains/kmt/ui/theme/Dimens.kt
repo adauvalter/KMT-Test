@@ -18,7 +18,6 @@ object Dimens {
     val PanelSpacing = Space16
     val PanelPadding = Space16
     val PanelTitleSpacing = Space8
-    val PanelCornerRadius = Space16
     val PanelElevation = ElevationSm
     val EditorPadding = Space12
     val EditorGutterPadding = Space8

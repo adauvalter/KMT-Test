@@ -16,17 +16,20 @@ class NumberOperations {
         op: String,
         value: NumberValue,
         span: SourceSpan,
-    ): NumberValue {
-        return when (op) {
-            Operators.MINUS ->
+    ): NumberValue =
+        when (op) {
+            Operators.MINUS -> {
                 if (value.kind == NumberType.IntType) {
                     NumberValue.fromInt(-value.asLong())
                 } else {
                     NumberValue.fromDouble(-value.asDouble())
                 }
-            else -> throw EvaluationError("Unknown operator '$op'", span)
+            }
+
+            else -> {
+                throw EvaluationError("Unknown operator '$op'", span)
+            }
         }
-    }
 
     /**
      * Applies a binary operator to two numeric values.
@@ -36,8 +39,8 @@ class NumberOperations {
         right: NumberValue,
         op: String,
         span: SourceSpan,
-    ): NumberValue {
-        return when (op) {
+    ): NumberValue =
+        when (op) {
             Operators.PLUS -> add(left, right)
             Operators.MINUS -> subtract(left, right)
             Operators.MULTIPLY -> multiply(left, right)
@@ -45,38 +48,34 @@ class NumberOperations {
             Operators.POWER -> NumberValue.fromDouble(left.asDouble().pow(right.asDouble()))
             else -> throw EvaluationError("Unknown operator '$op'", span)
         }
-    }
 
     private fun add(
         left: NumberValue,
         right: NumberValue,
-    ): NumberValue {
-        return if (left.kind == NumberType.IntType && right.kind == NumberType.IntType) {
+    ): NumberValue =
+        if (left.kind == NumberType.IntType && right.kind == NumberType.IntType) {
             NumberValue.fromInt(left.asLong() + right.asLong())
         } else {
             NumberValue.fromDouble(left.asDouble() + right.asDouble())
         }
-    }
 
     private fun subtract(
         left: NumberValue,
         right: NumberValue,
-    ): NumberValue {
-        return if (left.kind == NumberType.IntType && right.kind == NumberType.IntType) {
+    ): NumberValue =
+        if (left.kind == NumberType.IntType && right.kind == NumberType.IntType) {
             NumberValue.fromInt(left.asLong() - right.asLong())
         } else {
             NumberValue.fromDouble(left.asDouble() - right.asDouble())
         }
-    }
 
     private fun multiply(
         left: NumberValue,
         right: NumberValue,
-    ): NumberValue {
-        return if (left.kind == NumberType.IntType && right.kind == NumberType.IntType) {
+    ): NumberValue =
+        if (left.kind == NumberType.IntType && right.kind == NumberType.IntType) {
             NumberValue.fromInt(left.asLong() * right.asLong())
         } else {
             NumberValue.fromDouble(left.asDouble() * right.asDouble())
         }
-    }
 }
